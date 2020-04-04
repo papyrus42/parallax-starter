@@ -48,7 +48,6 @@ namespace ParallaxStarter
 
             // TODO: use this.Content to load your game content here
             var spritesheet = Content.Load<Texture2D>("helicopter");
-            var bulletSprite = Content.Load<Texture2D>("bullet");
             player = new Player(spritesheet);
 
  
@@ -57,7 +56,7 @@ namespace ParallaxStarter
             playerLayer.Sprites.Add(player);
            
             
-            playerLayer.DrawOrder = 2;
+            playerLayer.DrawOrder = 3;
             //var playerScrollController = playerLayer.ScrollController as AutoScrollController;
             //playerScrollController.Speed = 80f;
             Components.Add(playerLayer);
@@ -83,15 +82,16 @@ namespace ParallaxStarter
 
             var midgroundLayer = new ParallaxLayer(this);
             midgroundLayer.Sprites.AddRange(midgroundSprites);
-            midgroundLayer.DrawOrder = 1;
+            midgroundLayer.DrawOrder = 2;
             //var midgroundScrollController = midgroundLayer.ScrollController as AutoScrollController;
            // midgroundScrollController.Speed = 40f;
             Components.Add(midgroundLayer);
-            var bsprite = new StaticSprite(bulletSprite, new Vector2(3000,100));
-            b = new bullet(bsprite);
-            var bulletLayer = new ParallaxLayer(this);
-            bulletLayer.Sprites.Add(b);
-            bulletLayer.DrawOrder = 5;
+            var moonText = Content.Load<Texture2D>("moon");
+            var moonSprite = new StaticSprite(moonText, new Vector2(500,-50));
+            var moonLayer = new ParallaxLayer(this);
+            moonLayer.Sprites.Add(moonSprite);
+            moonLayer.DrawOrder = 0;
+            Components.Add(moonLayer);
 
             var foregroundTextures = new List<Texture2D>()
     {
@@ -116,10 +116,11 @@ namespace ParallaxStarter
             }
 
             foregroundLayer.DrawOrder = 4;
-            bTexture = Content.Load<Texture2D>("bullet");
-            var bull = new StaticSprite(bTexture, new Vector2(200,100));
+            bTexture = Content.Load<Texture2D>("small bullet");
+            var bull = new StaticSprite(bTexture, new Vector2(100,100));
             var bullLayer = new ParallaxLayer(this);
-            bullLayer.Sprites.Add(bull);
+            b = new bullet(bull);
+            bullLayer.Sprites.Add(b);
             bullLayer.DrawOrder = 6;
             Components.Add(bullLayer);
 
@@ -133,9 +134,8 @@ namespace ParallaxStarter
             playerLayer.ScrollController = new PlayerTrackingScrollController(player, 1.0f);
             foregroundLayer.ScrollController = new PlayerTrackingScrollController(player, 1.0f);
             //bulletLayer.ScrollController = new PlayerTrackingScrollController(player, 2.0f);
-            bullLayer.ScrollController = new PlayerTrackingScrollController(player, 1.5f);
-            //var bulletScrollController = bulletLayer.ScrollController as AutoScrollController;
-            //bulletScrollController.Speed = 100f;
+            bullLayer.ScrollController = new PlayerTrackingScrollController(player, 1.0f);
+            moonLayer.ScrollController = new PlayerTrackingScrollController(player, 0.02f);
 
         }
 
@@ -161,11 +161,11 @@ namespace ParallaxStarter
 
             // TODO: Add your update logic here
             player.Update(gameTime);
-            //if (!b.isShot)
-            //  {
-            //     b.sprite.position = player.Position;
-            //}
-            //b.Update(gameTime);
+            if (!b.isShot)
+              {
+                 b.sprite.position = player.Position - new Vector2(300,100);
+            }
+            b.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -178,9 +178,6 @@ namespace ParallaxStarter
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            spriteBatch.Draw(bTexture, new Vector2(200,200), Color.White);
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }

@@ -28,21 +28,25 @@ namespace ParallaxStarter
             isShot = false;
         }
 
-        //public void Update(GameTime gameTime)
-        //{
-        //    //Vector2 direction = Vector2.Zero;
+       public void Update(GameTime gameTime)
+        {
+            Vector2 direction = Vector2.Zero;
 
-        //    //if (Keyboard.GetState().IsKeyDown(Keys.Space))
-        //    //{
-        //    //    isShot = true;
-        //    //}
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                isShot = true;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                isShot = false;
+            }
 
-        //    //if (isShot)
-        //    //{
-        //    //    direction.X += 2;
-        //    //    sprite.position += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed * direction;
-        //    //}
-        //}
+            if (isShot)
+            {
+                direction.X += 2;
+                sprite.position += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed * direction;
+            }
+        }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
